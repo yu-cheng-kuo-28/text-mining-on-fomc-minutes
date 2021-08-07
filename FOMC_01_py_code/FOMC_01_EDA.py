@@ -119,8 +119,10 @@ unchanged_index = np.array(unchanged_index)
 
 #### 5-1 Line Chart
 
+import os
 os.chdir(r'D:\G03_1\FOMC\FOMC_05_output_figures')
 os.getcwd()
+
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 
@@ -243,6 +245,9 @@ sm.stats.acorr_ljungbox(model_fit.resid, return_df=True)
 
 #### 6-1 Pie chart of Fed fund rate
 
+## Import Chinese font
+plt.rcParams['font.sans-serif'] = ['Taipei Sans TC Beta']
+
 import matplotlib.pyplot as plt
 import numpy as np
 import os
@@ -252,15 +257,17 @@ os.getcwd()
 
 fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
 
-recipe = ["Down (13.5%) (30/222)",
-          "Up (17.6%) (39/222)",
-          "Unchanged (68.9%) (153/222)"]
+recipe = ["Down (13.51%) (30/222)",
+          "Up (17.57%) (39/222)",
+          "Unchanged (68.92%) (153/222)"]
 
 data = [30, 39, 153]
+myexplode = [0.05, 0.05, 0.15]
 
-wedges, texts = ax.pie(data, wedgeprops=dict(width=0.5), startangle=-40)
+wedges, texts = ax.pie(data, wedgeprops=dict(width=1.0), startangle=-40, explode = myexplode)
 
 bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+
 kw = dict(arrowprops=dict(arrowstyle="-"),
           bbox=bbox_props, zorder=0, va="center")
 
@@ -276,10 +283,43 @@ for i, p in enumerate(wedges):
 
 ax.set_title("Proportions of Fed Funds Rate Changes", fontsize="xx-large")
 
-plt.savefig('04_Rate_Pie_Chart.png', dpi= 1000, bbox_inches='tight')
+plt.savefig('04_Rate_Pie_Chart_0.png', dpi= 1000, bbox_inches='tight')
 plt.close()
 
 
+## Chinese
+plt.rcParams['font.sans-serif'] = ['Taipei Sans TC Beta']
+
+fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
+
+recipe = ["降息樣本 (13.51%) (30/222)",
+          "升息樣本 (17.57%) (39/222)",
+          "利率不變樣本 (68.92%) (153/222)"]
+
+data = [30, 39, 153]
+myexplode = [0.05, 0.05, 0.15]
+
+wedges, texts = ax.pie(data, wedgeprops=dict(width=1.0), startangle=-40, explode = myexplode)
+
+bbox_props = dict(boxstyle="square,pad=0.3", fc="w", ec="k", lw=0.72)
+
+kw = dict(arrowprops=dict(arrowstyle="-"),
+          bbox=bbox_props, zorder=0, va="center")
+
+for i, p in enumerate(wedges):
+    ang = (p.theta2 - p.theta1)/2. + p.theta1
+    y = np.sin(np.deg2rad(ang))
+    x = np.cos(np.deg2rad(ang))
+    horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+    connectionstyle = "angle,angleA=0,angleB={}".format(ang)
+    kw["arrowprops"].update({"connectionstyle": connectionstyle})
+    ax.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y), fontsize="x-large",
+                horizontalalignment=horizontalalignment, **kw)
+
+ax.set_title("FOMC Minutes 中升息、降息、利率不變樣本的占比", fontsize="xx-large")
+
+plt.savefig('04_Rate_Pie_Chart_1_Chinese.png', dpi= 1000, bbox_inches='tight')
+plt.close()
 
 #%% (8) Line Chart of Word, Voc, TTR of FOMC Minutes Combining with Fed Funds Rate 
 
@@ -317,9 +357,9 @@ plt.axvspan(120, 132, color='lightblue', alpha=0.5, lw=0)
 plt.axvspan(217, 222, color='lightblue', alpha=0.5, lw=0)
 
 crisis_data = [
-    (66, '2001/03. Peak of Dot-Com Bubble.'),
-    (120, '2007/12. Peak of Financial Crisis.'),
-    (217, '2020/02. Peak of COVID-19.')]
+    (66, '2001/03: Peak of Dot-Com Bubble'),
+    (120, '2007/12: Peak of Financial Crisis'),
+    (217, '2020/02: Peak of COVID-19')]
 x, label = crisis_data[0]
 plt.annotate(label, xy=(x, FOMC_words[x] - 550),
              xytext= (x, FOMC_words[x] - 1150),
@@ -340,8 +380,73 @@ plt.legend(fontsize = 14, loc = 'lower right') # Indicate the labed markers
 1. fontsize: Either an relative value of 'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large' 
 or an absolute font size, e.g., 12.
 '''
-plt.savefig('05_FOMC_Word_Counts.png', dpi= 1000, bbox_inches= 'tight') 
+plt.savefig('05_FOMC_Word_Counts_0.png', dpi= 1000, bbox_inches= 'tight') 
 plt.close()
+
+
+
+## Chinese
+
+import os
+os.chdir(r'D:\G03_1\FOMC\FOMC_05_output_figures')
+os.getcwd()
+import matplotlib.pyplot as plt
+
+
+plt.figure(figsize=(12, 5))
+plt.grid()
+
+plt.plot(up_index+1 ,  FOMC_words[up_index], 'o', color= 'blue', label="升息")  # up_index 
+plt.plot(down_index+1,  FOMC_words[down_index], 's', color= 'crimson', label="降息")  # down_index 
+plt.plot(unchanged_index+1,  FOMC_words[unchanged_index], '*', color= 'darkgreen', label="利率不變")  # unchanged_index 
+# Draw 3 kinds of markers and change their colors.
+# 'o' is circle marker;'s' is square marker; '*' star marker. 
+# Add labels and plt.legend() will catch them later
+plt.plot(list(range(1,223)), FOMC_words, '--k')
+
+
+# plt.xlabel('1993/01/01 ~ 2020/10/01', fontsize = 15)
+plt.ylabel('單字數 (word counts)', fontsize = 16)
+plt.title('FOMC Minutes 的單字數 (1993/01/01 ~ 2020/10/01)', fontsize = 16)
+plt.axis([-1, 224, 0, 4800]) 
+plt.xticks(range(1, 224, 20), 
+           labels = ['1993/02','1995/08','1998/02','2000/08','2003/01','2005/08',
+                     '2008/01','2010/08','2013/01','2015/07','2018/01','2020/07'], fontsize = 14.5)  
+plt.yticks(range(0, 5001, 500), fontsize = 14.5)
+
+plt.axvspan(66, 71, color='lightblue', alpha=0.5, lw=0)
+plt.axvspan(120, 132, color='lightblue', alpha=0.5, lw=0)
+plt.axvspan(217, 222, color='lightblue', alpha=0.5, lw=0)
+
+crisis_data = [
+    (66, '2001/03: Peak of Dot-Com Bubble'),
+    (120, '2007/12: Peak of Financial Crisis'),
+    (217, '2020/02: Peak of COVID-19')]
+x, label = crisis_data[0]
+plt.annotate(label, xy=(x, FOMC_words[x] - 550),
+             xytext= (x, FOMC_words[x] - 1150),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 16)
+x, label = crisis_data[1]
+plt.annotate(label, xy=(x, FOMC_words[x] - 1150),
+             xytext= (x, FOMC_words[x] - 1750),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='left', verticalalignment= 'top', fontsize = 16)
+x, label = crisis_data[2]
+plt.annotate(label, xy=(x, FOMC_words[x] - 1200),
+             xytext= (x, FOMC_words[x] - 1700),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='right', verticalalignment= 'top', fontsize = 16)
+plt.legend(fontsize = 15, loc = 'lower right') # Indicate the labed markers
+'''
+1. fontsize: Either an relative value of 'xx-small', 'x-small', 'small', 'medium', 'large', 'x-large', 'xx-large' 
+or an absolute font size, e.g., 12.
+'''
+plt.savefig('05_FOMC_Word_Counts_1.png', dpi= 1000, bbox_inches= 'tight') 
+plt.close()
+
+
+
 
 
 
@@ -503,6 +608,59 @@ plt.savefig('07_FOMC_TTR_3.png', dpi= 1000, bbox_inches= 'tight')
 plt.close() # Close the current figure
 
 
+
+## Chinese
+
+import numpy as np
+
+plt.figure(figsize=(11, 5)) # Change figure size
+plt.grid() # Simply add grid by default
+
+plt.plot(list(range(1,222)), FOMC_vocabularies_ratio_2, 'o', color= 'blue')
+plt.plot(list(range(1,222)), FOMC_vocabularies_ratio_2, '--k') # label='Line'
+
+plt.ylabel('TTR (type-token ratio)', fontsize = 15)
+plt.title('FOMC Minutes 的 TTR (1993/01/01 ~ 2020/10/01)', fontsize = 16)
+plt.axis([-2, 223, 0.18, 0.40]) 
+plt.xticks(range(1, 224, 20), 
+           labels = ['1993/02','1995/08','1998/02','2000/08','2003/01','2005/08',
+                     '2008/01','2010/08','2013/01','2015/07','2018/01','2020/07'],
+           fontsize = 12.5)  
+plt.yticks(np.arange(0.18, 0.40, 0.05), fontsize = 13)
+
+# Shadow
+plt.axvspan(65, 70, color='lightblue', alpha=0.5, lw=0)
+plt.axvspan(119, 131, color='lightblue', alpha=0.5, lw=0)
+plt.axvspan(216, 221, color='lightblue', alpha=0.5, lw=0)
+
+
+# Annotation 
+crisis_data = [
+    (65, '2001/03: Peak of Dot-Com Bubble'),
+    (119, '2007/12: Peak of Financial Crisis'),
+    (216, '2020/02: Peak of COVID-19')]
+
+x, label = crisis_data[0]
+plt.annotate(label, xy=(x, 0.23),
+             xytext= (x, 0.21),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 15) # rotation= 1
+    
+x, label = crisis_data[1]
+plt.annotate(label, xy=(x, 0.363),
+             xytext= (x, 0.395),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 15) # rotation= 1
+
+x, label = crisis_data[2]
+plt.annotate(label, xy=(x, 0.28),
+             xytext= (x, 0.312),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='right', verticalalignment= 'top', fontsize = 15) # rotation= 1
+
+# plt.tight_layout() # tight layout for plt.show()
+plt.savefig('07_FOMC_TTR_4_Chinese.png', dpi= 1000, bbox_inches= 'tight') 
+plt.close() # Close the current figure
 
 
 
@@ -806,6 +964,68 @@ plt.close() # Close the current figure
 
 
 
+## Chinese version
+import numpy as np
+
+plt.figure(figsize=(11.6, 5)) # Change figure size
+plt.grid() # Simply add grid by default
+
+STTR_500 = np.array(STTR_all[2])
+
+# plt.plot(list(range(0,221)), STTR, 'bo')
+plt.plot(up_index_3 + 1,  STTR_500[up_index_3], 'bo', label="升息")  # up_index 
+plt.plot(down_index_3 + 1,  STTR_500[down_index_3], 'rs', label="降息")  # down_index 
+plt.plot(unchanged_index_3 + 1,  STTR_500[unchanged_index_3], 'g*', label="利率不變")  # unchanged_index 
+
+plt.plot(list(range(1,222)), STTR_500, 'k', linewidth = 1.2) # label='Line'
+# Draw a line. '--' is dashed line style. 'k' is black.
+
+plt.ylabel('STTR', fontsize = 13)
+plt.title('FOMC Minutes 的 STTR (拔靴法抽樣 1000 次，每次抽取 500 個單字) (1993/01/01 ~ 2020/10/01)', fontsize = 16)
+plt.axis([-2, 223, 0.545, 0.635]) 
+plt.xticks(range(1, 224, 20), 
+           labels = ['1993/02','1995/08','1998/02','2000/08','2003/01','2005/08',
+                     '2008/01','2010/08','2013/01','2015/07','2018/01','2020/07'],
+           fontsize = 12.5)  
+plt.yticks(np.arange(0.54, 0.64, 0.01), fontsize = 12.5)
+
+# Shadow
+plt.axvspan(65, 70, color='lightblue', alpha=0.5, lw=0)
+plt.axvspan(119, 131, color='lightblue', alpha=0.5, lw=0)
+plt.axvspan(216, 221, color='lightblue', alpha=0.5, lw=0)
+
+
+# Annotation 
+crisis_data = [
+    (65, '2001/03: Peak of Dot-Com Bubble'),
+    (119, '2007/12: Peak of Financial Crisis'),
+    (216, '2020/02: Peak of COVID-19')]
+
+x, label = crisis_data[0]
+plt.annotate(label, xy=(x, 0.58),
+             xytext= (x, 0.57),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 15) # rotation= 1
+    
+x, label = crisis_data[1]
+plt.annotate(label, xy=(x, 0.567),
+             xytext= (x, 0.5557),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 15) # rotation= 1
+
+x, label = crisis_data[2]
+plt.annotate(label, xy=(x, 0.56),
+             xytext= (x, 0.55),
+             arrowprops= dict(facecolor='black', headwidth= 4, width=2, headlength= 4),
+             horizontalalignment='right', verticalalignment= 'top', fontsize = 15) # rotation= 1
+
+# plt.tight_layout() # tight layout for plt.show()
+plt.legend(fontsize = 12.5, loc = 'lower left') # Indicate the labed markers
+plt.savefig('10_FOMC_STTR_Sampling_500_Chinese.png', dpi= 1000, bbox_inches= 'tight') 
+plt.close() # Close the current figure
+
+
+
 
 #%% (10) Probing into STTR: Time Series
 
@@ -976,6 +1196,34 @@ fig.savefig('13_Boxplot_Words.png', dpi = 900, bbox_inches='tight')
 plt.close()
 
 
+## Chinese
+import os
+os.chdir(r'D:\G03_1\FOMC\FOMC_05_output_figures')
+os.getcwd()
+
+# [1] Boxplot_01_words
+# datafile = u'D:\\pythondata\\learn\\matplotlib.xlsx'
+# data = pd.read_excel(datafile)
+box_1, box_2, box_3 = FOMC_words_2[up_index_2], FOMC_words_2[down_index_2], FOMC_words_2[unchanged_index_2]
+ 
+fig = plt.figure(figsize=(7,2.2)) # figsize=(9,3)
+plt.title('升息、降息、利率不變三類樣本的單字數統計 (扣除了一個離群值)', fontsize = 15)
+labels = '升息 (17.6%)','降息 (13.5%)','利率不變 (68.9%)'
+
+# vert=False; showmeans=True:
+plt.boxplot( [box_1, box_2, box_3], labels = labels, widths= 0.7,
+            vert= False, showmeans= True)
+# plt.show()
+# plt.axis([1500,5000, 0.5, 3.5])
+# plt.xticks(range(0, 223, 25))  
+# plt.yticks(list(range(0, 5001, 500)))  
+plt.grid(color='silver', linestyle='-', linewidth= 1, b=None, which='major', axis='both')
+
+plt.tight_layout()
+fig.savefig('13_Boxplot_Words_Chinese.png', dpi = 900, bbox_inches='tight')
+plt.close()
+
+
 
 #### 11-2 Vocabulary counts
 
@@ -1057,6 +1305,23 @@ fig.savefig('17_Boxplot_STTR_500.png', dpi= 900, bbox_inches='tight')
 plt.close()
 
 
+## Chinese
+
+box_1, box_2, box_3 = STTR_500[up_index_2], STTR_500[down_index_2], STTR_500[unchanged_index_2]
+ 
+fig =  plt.figure(figsize=(7,1.8)) # figsize=(9,3)
+plt.title('升息、降息、利率不變樣本的 STTR 箱型圖',fontsize = 15)
+labels = '升息 (17.6%)','降息 (13.5%)','利率不變 (68.9%)'
+ 
+# vert=False；showmeans=True：
+plt.boxplot( [box_1, box_2, box_3], labels = labels, widths= 0.7,
+            vert= False, showmeans= True)
+plt.grid(color='silver', linestyle='-', linewidth= 1, b=None, which='major', axis='both') # linewidth= 1.2
+# plt.tight_layout()
+
+# plt.show()
+fig.savefig('17_Boxplot_STTR_500_Chinese.png', dpi= 900, bbox_inches='tight')
+plt.close()
 
 
 
@@ -1064,7 +1329,6 @@ plt.close()
 
 
 #%% (12) Adding Fed Chairman Terms to EDA
-
 
 os.chdir(r'D:\G03_1\FOMC\FOMC_05_output_figures')
 os.getcwd()
@@ -1074,8 +1338,6 @@ import matplotlib as mpl
 
 plt.subplots(figsize=(18,10))
 
-
-#### 12-1 Fed Funds Rate & Business Cycle & Fed Chairman Terms 
 
 plt.subplot(2,1,1)
 
@@ -1088,7 +1350,11 @@ plt.axvspan(325, 334, color='thistle', alpha=0.5, lw=0)
 
 mpl.rc('xtick', labelsize=13.5) 
 mpl.rc('ytick', labelsize=15) 
-plt.xticks(range(0, 333, 29), fontsize = 13) 
+# plt.xticks(range(0, 333, 29), fontsize = 13) 
+plt.xticks(range(0, 333, 29), 
+           labels = ['1993-01-01', '1995-06-01', '1997-11-01', '2000-04-01', '2002-09-01', '2005-02-01', 
+                     '2007-07-01', '2009-12-01', '2012-05-01', '2014-10-01', '2017-03-01', '2019-08-01'],
+           fontsize = 13,  rotation= 3.5)
 plt.plot(real_rate.FEDFUNDS, c='blue')
 
 plt.axis([-2, 336, -0.2, 7.0]) 
@@ -1102,7 +1368,6 @@ plt.title('Effective Federal Funds Rate & Business cycle (1993/01/01 ~ 2020/10/0
 
 plt.subplot(2,1,2)
 
-# plt.figure(figsize=(18,5))
 plt.grid()
 
 plt.axvspan(157, 252, color='lightblue', alpha=0.5, lw=0)
@@ -1131,19 +1396,116 @@ plt.annotate('Powell', xy=(318, 6.6),
 
 mpl.rc('xtick', labelsize=13.5) 
 mpl.rc('ytick', labelsize=15) 
-plt.xticks(range(0, 333, 29), fontsize = 13) 
+# plt.xticks(range(0, 333, 29), fontsize = 13) 
+plt.xticks(range(0, 333, 29), 
+           labels = ['1993-01-01', '1995-06-01', '1997-11-01', '2000-04-01', '2002-09-01', '2005-02-01', 
+                     '2007-07-01', '2009-12-01', '2012-05-01', '2014-10-01', '2017-03-01', '2019-08-01'],
+           fontsize = 13, rotation= 3.5)
+
 plt.yticks(range(0, 8, 1), fontsize = 13) 
 plt.plot(real_rate.FEDFUNDS, c='blue')
 
 plt.axis([-2, 336, -0.2, 8.0]) 
+
+
 plt.ylabel('Percent', fontsize = 18)
 plt.title('Effective Federal Funds Rate & Fed Chairman Terms (1993/01/01 ~ 2020/10/01)', fontsize = 20)
 
-# plt.savefig('19_Fed_Chairman_Rate.png', dpi= 1000, bbox_inches='tight')
+
+plt.savefig('20_Fed_Chairman_Funds_Rate_1_Chinese.png', dpi= 1000, bbox_inches='tight')
+plt.close()
+
+
+
+
+
+# ==== Chinese version ====
+
+os.chdir(r'D:\G03_1\FOMC\FOMC_05_output_figures')
+os.getcwd()
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+
+
+plt.subplots(figsize=(15,9))
+
+plt.subplot(2,1,1)
+plt.subplots_adjust(left=None, bottom=None, right=None, top=None, wspace=None, hspace=0.3)
+
+# plt.figure(figsize=(18,5))
+plt.grid()
+
+plt.axvspan(98, 107, color='thistle', alpha=0.5, lw=0)
+plt.axvspan(179, 198, color='thistle', alpha=0.5, lw=0)
+plt.axvspan(325, 334, color='thistle', alpha=0.5, lw=0)
+
+mpl.rc('xtick', labelsize=13.5) 
+mpl.rc('ytick', labelsize=15) 
+# plt.xticks(range(0, 333, 29), fontsize = 13) 
+plt.xticks(range(0, 333, 29), 
+           labels = ['1993-01-01', '1995-06-01', '1997-11-01', '2000-04-01', '2002-09-01', '2005-02-01', 
+                     '2007-07-01', '2009-12-01', '2012-05-01', '2014-10-01', '2017-03-01', '2019-08-01'],
+           fontsize = 13,  rotation= 3.5)
+plt.plot(real_rate.FEDFUNDS, c='blue')
+
+plt.axis([-2, 336, -0.2, 7.0]) 
+plt.ylabel('百分比', fontsize = 18)
+plt.title('美國聯邦基金利率變動與景氣循環 (1993/01/01 ~ 2020/10/01) (陰影區為衰退期)', fontsize = 20)
+
+# plt.savefig('18_Fed_Chairman_Rate.png', dpi= 1000, bbox_inches='tight')
 # plt.close()
 
-plt.savefig('20_Fed_Chairman_Funds_Rate.png', dpi= 1000, bbox_inches='tight')
+
+
+plt.subplot(2,1,2)
+
+plt.grid()
+
+plt.axvspan(157, 252, color='lightblue', alpha=0.5, lw=0)
+plt.axvspan(252, 300, color='lightgreen', alpha=0.5, lw=0)
+plt.axvspan(300, 334, color='pink', alpha=0.5, lw=0)
+
+plt.annotate('Alan Greenspan', xy=(86, 7.7),
+             xytext= (86, 7.7),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 22)
+
+plt.annotate('Ben Bernanke', xy=(208, 7.7),
+             xytext= (208, 7.7),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 22)
+
+plt.annotate('Janet Yellen', xy=(275, 7.7),
+             xytext= (275, 7.7),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 22)
+
+plt.annotate('Jerome', xy=(318, 7.7),
+             xytext= (318, 7.7),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 22)
+
+plt.annotate('Powell', xy=(318, 6.6),
+             xytext= (318, 6.6),
+             horizontalalignment='center', verticalalignment= 'top', fontsize = 22)
+
+mpl.rc('xtick', labelsize=13.5) 
+mpl.rc('ytick', labelsize=15) 
+# plt.xticks(range(0, 333, 29), fontsize = 13) 
+plt.xticks(range(0, 333, 29), 
+           labels = ['1993-01-01', '1995-06-01', '1997-11-01', '2000-04-01', '2002-09-01', '2005-02-01', 
+                     '2007-07-01', '2009-12-01', '2012-05-01', '2014-10-01', '2017-03-01', '2019-08-01'],
+           fontsize = 13, rotation= 3.5)
+
+plt.yticks(range(0, 8, 1), fontsize = 13) 
+plt.plot(real_rate.FEDFUNDS, c='blue')
+
+plt.axis([-2, 336, -0.2, 8.0]) 
+
+
+plt.ylabel('百分比', fontsize = 18)
+plt.title('美國聯邦基金利率變動與聯準會主席任期 (1993/01/01 ~ 2020/10/01)', fontsize = 20)
+
+
+plt.savefig('20_Fed_Chairman_Funds_Rate_1_Chinese.png', dpi= 1000, bbox_inches='tight')
 plt.close()
+
 
 
 
@@ -1183,7 +1545,11 @@ plt.annotate('Powell', xy=(318, 6.6),
 
 mpl.rc('xtick', labelsize=13.5) 
 mpl.rc('ytick', labelsize=15) 
-plt.xticks(range(0, 333, 29), fontsize = 13) 
+# plt.xticks(range(0, 333, 29), fontsize = 13) 
+plt.xticks(range(0, 333, 29), 
+           labels = ['1993/02','1995/08','1998/02','2000/08','2003/01','2005/08',
+                     '2008/01','2010/08','2013/01','2015/07','2018/01','2020/07'],
+           fontsize = 13)
 plt.yticks(range(0, 8, 1), fontsize = 13) 
 plt.plot(real_rate.FEDFUNDS, c='blue')
 
@@ -1253,7 +1619,7 @@ plt.annotate(label, xy=(x, 0.56),
 plt.legend(fontsize = 12.5, loc = 'lower left') # Indicate the labed markers
 
 
-plt.savefig('21_Fed_Chairman_Funds_Rate_STTR_500.png', dpi= 1000, bbox_inches='tight')
+plt.savefig('21_Fed_Chairman_Funds_Rate_STTR_500_02.png', dpi= 1000, bbox_inches='tight')
 plt.close()
 
 
