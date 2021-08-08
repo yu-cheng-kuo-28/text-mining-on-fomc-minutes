@@ -406,8 +406,8 @@ plt.plot(list(range(1,223)), FOMC_words, '--k')
 
 
 # plt.xlabel('1993/01/01 ~ 2020/10/01', fontsize = 15)
-plt.ylabel('單字數 (word counts)', fontsize = 16)
-plt.title('FOMC Minutes 的單字數 (1993/01/01 ~ 2020/10/01)', fontsize = 16)
+plt.ylabel('字詞數 (word counts)', fontsize = 16)
+plt.title('FOMC Minutes 的字詞數 (1993/01/01 ~ 2020/10/01)', fontsize = 16)
 plt.axis([-1, 224, 0, 4800]) 
 plt.xticks(range(1, 224, 20), 
            labels = ['1993/02','1995/08','1998/02','2000/08','2003/01','2005/08',
@@ -1207,7 +1207,7 @@ os.getcwd()
 box_1, box_2, box_3 = FOMC_words_2[up_index_2], FOMC_words_2[down_index_2], FOMC_words_2[unchanged_index_2]
  
 fig = plt.figure(figsize=(7,2.2)) # figsize=(9,3)
-plt.title('升息、降息、利率不變三類樣本的單字數統計 (扣除了一個離群值)', fontsize = 15)
+plt.title('升息、降息、利率不變三類樣本的字詞數統計 (扣除了一個離群值)', fontsize = 15)
 labels = '升息 (17.6%)','降息 (13.5%)','利率不變 (68.9%)'
 
 # vert=False; showmeans=True:
@@ -1450,7 +1450,7 @@ plt.plot(real_rate.FEDFUNDS, c='blue')
 
 plt.axis([-2, 336, -0.2, 7.0]) 
 plt.ylabel('百分比', fontsize = 18)
-plt.title('美國聯邦基金利率變動與景氣循環 (1993/01/01 ~ 2020/10/01) (陰影區為衰退期)', fontsize = 20)
+plt.title('聯邦基金利率變動與景氣循環 (1993/01/01 ~ 2020/10/01) (陰影區為衰退期)', fontsize = 20)
 
 # plt.savefig('18_Fed_Chairman_Rate.png', dpi= 1000, bbox_inches='tight')
 # plt.close()
@@ -1500,7 +1500,7 @@ plt.axis([-2, 336, -0.2, 8.0])
 
 
 plt.ylabel('百分比', fontsize = 18)
-plt.title('美國聯邦基金利率變動與聯準會主席任期 (1993/01/01 ~ 2020/10/01)', fontsize = 20)
+plt.title('聯邦基金利率變動與聯準會主席任期 (1993/01/01 ~ 2020/10/01)', fontsize = 20)
 
 
 plt.savefig('20_Fed_Chairman_Funds_Rate_1_Chinese.png', dpi= 1000, bbox_inches='tight')
