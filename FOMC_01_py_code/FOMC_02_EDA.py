@@ -245,12 +245,14 @@ sm.stats.acorr_ljungbox(model_fit.resid, return_df=True)
 
 #### 6-1 Pie chart of Fed fund rate
 
-## Import Chinese font
-plt.rcParams['font.sans-serif'] = ['Taipei Sans TC Beta']
 
 import matplotlib.pyplot as plt
 import numpy as np
 import os
+
+## Import Chinese font
+plt.rcParams['font.sans-serif'] = ['Taipei Sans TC Beta']
+
 os.chdir(r'D:\G03_1\FOMC\FOMC_05_output_figures')
 os.getcwd()
 
@@ -292,9 +294,9 @@ plt.rcParams['font.sans-serif'] = ['Taipei Sans TC Beta']
 
 fig, ax = plt.subplots(figsize=(6, 3), subplot_kw=dict(aspect="equal"))
 
-recipe = ["降息樣本 (13.51%) (30/222)",
-          "升息樣本 (17.57%) (39/222)",
-          "利率不變樣本 (68.92%) (153/222)"]
+recipe = ["降息文檔 (13.51%) (30/222)",
+          "升息文檔 (17.57%) (39/222)",
+          "利率不變文檔 (68.92%) (153/222)"]
 
 data = [30, 39, 153]
 myexplode = [0.05, 0.05, 0.15]
@@ -316,7 +318,7 @@ for i, p in enumerate(wedges):
     ax.annotate(recipe[i], xy=(x, y), xytext=(1.35*np.sign(x), 1.4*y), fontsize="x-large",
                 horizontalalignment=horizontalalignment, **kw)
 
-ax.set_title("FOMC Minutes 中升息、降息、利率不變樣本的占比", fontsize="xx-large")
+ax.set_title("FOMC Minutes 中升息、降息、利率不變文檔的占比", fontsize="xx-large")
 
 plt.savefig('04_Rate_Pie_Chart_1_Chinese.png', dpi= 1000, bbox_inches='tight')
 plt.close()
@@ -981,7 +983,7 @@ plt.plot(list(range(1,222)), STTR_500, 'k', linewidth = 1.2) # label='Line'
 # Draw a line. '--' is dashed line style. 'k' is black.
 
 plt.ylabel('STTR', fontsize = 13)
-plt.title('FOMC Minutes 的 STTR (拔靴法抽樣 1000 次，每次抽取 500 個單字) (1993/01/01 ~ 2020/10/01)', fontsize = 16)
+plt.title('FOMC Minutes 的 STTR (拔靴法抽樣 1000 次，每次抽取 500 個字詞) (1993/01/01 ~ 2020/10/01)', fontsize = 16)
 plt.axis([-2, 223, 0.545, 0.635]) 
 plt.xticks(range(1, 224, 20), 
            labels = ['1993/02','1995/08','1998/02','2000/08','2003/01','2005/08',
@@ -1207,7 +1209,7 @@ os.getcwd()
 box_1, box_2, box_3 = FOMC_words_2[up_index_2], FOMC_words_2[down_index_2], FOMC_words_2[unchanged_index_2]
  
 fig = plt.figure(figsize=(7,2.2)) # figsize=(9,3)
-plt.title('升息、降息、利率不變三類樣本的字詞數統計 (扣除了一個離群值)', fontsize = 15)
+plt.title('升息、降息、利率不變三類文檔的字詞數統計 (扣除了一個離群值)', fontsize = 15)
 labels = '升息 (17.6%)','降息 (13.5%)','利率不變 (68.9%)'
 
 # vert=False; showmeans=True:
@@ -1310,7 +1312,7 @@ plt.close()
 box_1, box_2, box_3 = STTR_500[up_index_2], STTR_500[down_index_2], STTR_500[unchanged_index_2]
  
 fig =  plt.figure(figsize=(7,1.8)) # figsize=(9,3)
-plt.title('升息、降息、利率不變樣本的 STTR 箱型圖',fontsize = 15)
+plt.title('升息、降息、利率不變文檔的 STTR 箱型圖',fontsize = 15)
 labels = '升息 (17.6%)','降息 (13.5%)','利率不變 (68.9%)'
  
 # vert=False；showmeans=True：
@@ -1450,7 +1452,7 @@ plt.plot(real_rate.FEDFUNDS, c='blue')
 
 plt.axis([-2, 336, -0.2, 7.0]) 
 plt.ylabel('百分比', fontsize = 18)
-plt.title('聯邦基金利率變動與景氣循環 (1993/01/01 ~ 2020/10/01) (陰影區為衰退期)', fontsize = 20)
+plt.title('實質聯邦基金利率變動與景氣循環 (1993/01/01 ~ 2020/10/01) (陰影區為衰退期)', fontsize = 20)
 
 # plt.savefig('18_Fed_Chairman_Rate.png', dpi= 1000, bbox_inches='tight')
 # plt.close()
@@ -1500,7 +1502,7 @@ plt.axis([-2, 336, -0.2, 8.0])
 
 
 plt.ylabel('百分比', fontsize = 18)
-plt.title('聯邦基金利率變動與聯準會主席任期 (1993/01/01 ~ 2020/10/01)', fontsize = 20)
+plt.title('實質聯邦基金利率變動與聯準會主席任期 (1993/01/01 ~ 2020/10/01)', fontsize = 20)
 
 
 plt.savefig('20_Fed_Chairman_Funds_Rate_1_Chinese.png', dpi= 1000, bbox_inches='tight')
