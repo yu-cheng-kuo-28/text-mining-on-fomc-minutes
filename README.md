@@ -7,8 +7,8 @@ NCCU Master's Thesis: Text Mining on FOMC Minutes
 <br /><br />
    • Employed word2vec on 9 economic keywords regarding the Fed’s 3 primary mandates, unveiling Fed's focus on ethnic unemployment rates during interest rate hikes and cuts 
 <br /> <br />
-Please check the file "FOMC_00_thesis (Chinese)" to see:
+Please check the file "FOMC_00_thesis_Chinese" to see:
 <br />
-(1) yckuo_OralExam_PPT (Chinese).pdf
+(1) yckuo_OralExam_PPT_Chinese.pdf
 <br />
-(2) yckuo_Text-Mining-on-FOMC-Minutes (Chinese).pdf
+(2) yckuo_Text-Mining-on-FOMC-Minutes_Chinese.pdf
