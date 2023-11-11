@@ -1,7 +1,7 @@
 # text_mining_on_FOMC_minutes
 NCCU Master's Thesis: Text Mining on FOMC Minutes 
 <br />
-▶ Supervised by STAT’s Prof. Yu, Ching-Hsiang
+▶ Supervised by Statistics' Prof. Yu, Ching-Hsiang
 <br /> <br />
    • Applied dimension reduction techniques and machine learning algorithms (LR, SVM, RF, & XGBoost) to classify FOMC texts into 3 categories, resulting in a test accuracy of 88.11%
 <br /><br />
